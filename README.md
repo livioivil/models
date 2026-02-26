@@ -5,7 +5,6 @@ Teacher: [Livio Finos](https://liviofinos.net)
 *Activity 1: Confounders* [html](https://github.com/livioivil/models/blob/master/student_activity1.html)  [Rmd](https://github.com/livioivil/models/blob/master/student_activity1.Rmd)  <!-- [pdf](https://github.com/livioivil/models/blob/master/inference_booklet.pdf)  -->  
 *(Multiple) Linear Models*  [html](https://github.com/livioivil/inference_basics/blob/master/LinearModel_booklet.html)  [Rmd](https://github.com/livioivil/inference_basics/blob/master/LinearModel_booklet.Rmd)  [pdf](https://github.com/livioivil/inference_basics/blob/master/LinearModel_booklet.pdf)   
 *Activity 2: Multiple Linear Models*  [html](https://github.com/livioivil/models/blob/master/student_activity2.html)  [Rmd](https://github.com/livioivil/models/blob/master/student_activity2.Rmd)    
-<!-- [pdf](https://github.com/livioivil/models/blob/master/LinearModel_booklet.pdf)  -->
 *Activity 3: Contrasts*   [html](https://github.com/livioivil/models/blob/master/student_activity3.html)  [Rmd](https://github.com/livioivil/models/blob/master/student_activity3.Rmd)   
 *Generalized Linear Models*   [html](https://github.com/livioivil/models/blob/master/01_glm_intro.html)   
 *Generalized Linear Models: binomial*   [html](https://github.com/livioivil/models/blob/master/02_glm_binom.html)   
