@@ -1,0 +1,116 @@
+---
+title: "Statistics for Neuroscience – Lab Activity 2"
+author: "Livio Finos"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc_float: yes
+    toc: yes
+---
+
+## Multiple Linear Regression Homework: Model Selection via F-tests, Adjusted R², AIC, and Effect Sizes
+
+**Objective**: Select and justify the best model for diabetes progression (using in-sample criteria only): F-tests, adjusted R², AIC/BIC, and standardized effect sizes.
+
+### Part 1: Data loading and exploration (10 points)
+
+```{r}
+library(tidyverse)
+diab <- read_csv("./data/diabetes_sklearn.csv")
+```
+| Variable | Description                         | Units (pre-standardization) | Notes                                                  |
+| -------- | ----------------------------------- | --------------------------- | ------------------------------------------------------ |
+| age      | Age                                 | Years                       | -                                                      |
+| sex      | Sex                                 | M/F coded quantitatively    | Typically -0.0446 (female), +0.0507 (male)             |
+| bmi      | Body mass index                     | kg/m²                       | Strongest univariate predictor                         |
+| bp       | Average blood pressure              | mm Hg                       | -                                                      |
+| s1       | Total serum cholesterol (tc)        | mg/dL                       | -                                                      |
+| s2       | Low-density lipoprotein (ldl)       | mg/dL                       | "Bad" cholesterol                                      |
+| s3       | High-density lipoprotein (hdl)      | mg/dL                       | "Good" cholesterol                                     |
+| s4       | Total cholesterol / HDL ratio (tch) | Ratio                       | Higher = worse risk profile                            |
+| s5       | Log serum triglycerides (ltg)       | log(mg/dL)                  | Often second-strongest predictor                       |
+| s6       | Blood glucose level (glu)           | mg/dL                       | Fasting blood sugar                                    |
+| target   | Disease progression                 | Quantitative score          | One year after baseline; mean=152, SD=77, range 25–346 |
+
+**Tasks**:  
+
+1. Report predictor correlations with `target`, and pairwise correlations among top 3 predictors of `target`.   
+2. Scatterplot matrix of `target` vs `{bmi, s5, bp}`. Comment on linearity.
+
+### Part 2: Baseline models (20 points)
+
+Fit these nested models:
+
+```{r}
+m_null  <- lm(target ~ 1, data = diab)                    # Intercept only
+m_small <- lm(target ~ age + sex + bmi + bp, data = diab) # 4 clinical basics
+m_full  <- lm(target ~ ., data = diab)                    # All 10 predictors
+```
+
+**Tasks**:
+
+1. Compute and tabulate adjusted R² and AIC/BIC for all three.  
+2. **Global F-tests**: `anova(m_null, m_small)` and `anova(m_small, m_full)`. Interpret p-values: evidence against null model? Incremental value of extra 6 predictors?    
+3. **Effect size**: Report partial η² for each predictor in `m_full` (use `performance::model_performance()` or `car::Anova()`).
+
+### Part 3: Your model selection (20 points)
+
+**Propose `m_yours`** (4–8 predictors). Justify based on:  
+- Domain (e.g., BMI central to diabetes).   
+- Univariate correlations.   
+- Expected confounding (e.g., control for age/sex).
+
+Example:
+```{r}
+m_yours <- lm(target ~ bmi + s5 + s6 + sex + age, data = diab)
+```
+
+**Tasks**:
+
+1. Tabulate adjusted R², AIC/BIC vs `m_small` and `m_full`. Which "wins"?   
+2. **Hierarchical F-test**: `anova(m_yours, m_full)`. Significant loss in fit?  
+3. **Standardized effects**: Scale predictors and refit. Rank top 3 coefficients by magnitude (effect size).   
+
+### Part 4: Model comparison table (15 points)
+
+Create this table (using `broom::glance()` + `bind_rows()`):
+
+| Model    | adj.R² | Δadj.R² | AIC   | ΔAIC | Global F (p) |
+|----------|--------|---------|-------|------|--------------|
+| m_null   |        | -       |       | -    | -            |
+| m_small  |        |         |       |      |              |
+| m_yours  |        |         |       |      |              |
+| m_full   |        |         |       |      |              |
+
+**Discussion** (3–4 sentences): Best model by each criterion? Why AIC/BIC favor parsimony? Trade-off with adj.R²?
+
+### Part 5: Interpretation and effect sizes (20 points)
+
+For your best model:
+
+```{r}
+library(car)
+Anova(m_yours, type="III")  # Type III SS for effect sizes
+```
+
+**Tasks**:
+1. Identify 2 strongest predictors (Type III F or partial η² > 0.02).  
+2. Interpret: "The effect of BMI is [X] units per SD, p=[Y]."  
+3. **Discussion**: Confounding example? (Compare univariate vs multivariate coefficient for BMI.)
+
+### Part 6: Diagnostics (10 points)
+
+```{r}
+par(mfrow=c(2,2)); plot(m_yours)
+```
+
+Comment briefly: violations? Influential cases?
+
+### Part 7: Peer review interaction (5 points)
+
+**In class**: Share your table and best model. Groups vote: most parsimonious? Most explanatory? Submit 1-sentence peer feedback.
+
+**Total: 100 points**.

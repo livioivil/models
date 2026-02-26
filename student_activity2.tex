@@ -1,0 +1,392 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Statistics for Neuroscience -- Lab Activity 2},
+  pdfauthor={Livio Finos},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Statistics for Neuroscience -- Lab Activity 2}
+\author{Livio Finos}
+\date{}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\subsection{Multiple Linear Regression Homework: Model Selection via
+F-tests, Adjusted R², AIC, and Effect
+Sizes}\label{multiple-linear-regression-homework-model-selection-via-f-tests-adjusted-ruxb2-aic-and-effect-sizes}
+
+\textbf{Objective}: Select and justify the best model for diabetes
+progression (using in-sample criteria only): F-tests, adjusted R²,
+AIC/BIC, and standardized effect sizes.
+
+\subsubsection{Part 1: Data loading and exploration (10
+points)}\label{part-1-data-loading-and-exploration-10-points}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+## v dplyr     1.1.4     v readr     2.1.5
+## v forcats   1.0.1     v stringr   1.5.2
+## v ggplot2   4.0.0     v tibble    3.3.0
+## v lubridate 1.9.4     v tidyr     1.3.1
+## v purrr     1.1.0     
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{diab }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"./data/diabetes\_sklearn.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 442 Columns: 11
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## dbl (11): age, sex, bmi, bp, s1, s2, s3, s4, s5, s6, target
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0645}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2823}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2177}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.4355}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Units (pre-standardization)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Notes
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+age & Age & Years & - \\
+sex & Sex & M/F coded quantitatively & Typically -0.0446 (female),
++0.0507 (male) \\
+bmi & Body mass index & kg/m² & Strongest univariate predictor \\
+bp & Average blood pressure & mm Hg & - \\
+s1 & Total serum cholesterol (tc) & mg/dL & - \\
+s2 & Low-density lipoprotein (ldl) & mg/dL & ``Bad'' cholesterol \\
+s3 & High-density lipoprotein (hdl) & mg/dL & ``Good'' cholesterol \\
+s4 & Total cholesterol / HDL ratio (tch) & Ratio & Higher = worse risk
+profile \\
+s5 & Log serum triglycerides (ltg) & log(mg/dL) & Often second-strongest
+predictor \\
+s6 & Blood glucose level (glu) & mg/dL & Fasting blood sugar \\
+target & Disease progression & Quantitative score & One year after
+baseline; mean=152, SD=77, range 25--346 \\
+\end{longtable}
+
+\textbf{Tasks}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Report predictor correlations with \texttt{target}, and pairwise
+  correlations among top 3 predictors of \texttt{target}.\\
+\item
+  Scatterplot matrix of \texttt{target} vs \texttt{\{bmi,\ s5,\ bp\}}.
+  Comment on linearity.
+\end{enumerate}
+
+\subsubsection{Part 2: Baseline models (20
+points)}\label{part-2-baseline-models-20-points}
+
+Fit these nested models:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m\_null  }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(target }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{, }\AttributeTok{data =}\NormalTok{ diab)                    }\CommentTok{\# Intercept only}
+\NormalTok{m\_small }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(target }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sex }\SpecialCharTok{+}\NormalTok{ bmi }\SpecialCharTok{+}\NormalTok{ bp, }\AttributeTok{data =}\NormalTok{ diab) }\CommentTok{\# 4 clinical basics}
+\NormalTok{m\_full  }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(target }\SpecialCharTok{\textasciitilde{}}\NormalTok{ ., }\AttributeTok{data =}\NormalTok{ diab)                    }\CommentTok{\# All 10 predictors}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Tasks}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Compute and tabulate adjusted R² and AIC/BIC for all three.\\
+\item
+  \textbf{Global F-tests}: \texttt{anova(m\_null,\ m\_small)} and
+  \texttt{anova(m\_small,\ m\_full)}. Interpret p-values: evidence
+  against null model? Incremental value of extra 6 predictors?\\
+\item
+  \textbf{Effect size}: Report partial η² for each predictor in
+  \texttt{m\_full} (use \texttt{performance::model\_performance()} or
+  \texttt{car::Anova()}).
+\end{enumerate}
+
+\subsubsection{Part 3: Your model selection (20
+points)}\label{part-3-your-model-selection-20-points}
+
+\textbf{Propose \texttt{m\_yours}} (4--8 predictors). Justify based
+on:\\
+- Domain (e.g., BMI central to diabetes).\\
+- Univariate correlations.\\
+- Expected confounding (e.g., control for age/sex).
+
+Example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m\_yours }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(target }\SpecialCharTok{\textasciitilde{}}\NormalTok{ bmi }\SpecialCharTok{+}\NormalTok{ s5 }\SpecialCharTok{+}\NormalTok{ s6 }\SpecialCharTok{+}\NormalTok{ sex }\SpecialCharTok{+}\NormalTok{ age, }\AttributeTok{data =}\NormalTok{ diab)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Tasks}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Tabulate adjusted R², AIC/BIC vs \texttt{m\_small} and
+  \texttt{m\_full}. Which ``wins''?\\
+\item
+  \textbf{Hierarchical F-test}: \texttt{anova(m\_yours,\ m\_full)}.
+  Significant loss in fit?\\
+\item
+  \textbf{Standardized effects}: Scale predictors and refit. Rank top 3
+  coefficients by magnitude (effect size).
+\end{enumerate}
+
+\subsubsection{Part 4: Model comparison table (15
+points)}\label{part-4-model-comparison-table-15-points}
+
+Create this table (using \texttt{broom::glance()} +
+\texttt{bind\_rows()}):
+
+\begin{longtable}[]{@{}llllll@{}}
+\toprule\noalign{}
+Model & adj.R² & Δadj.R² & AIC & ΔAIC & Global F (p) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+m\_null & & - & & - & - \\
+m\_small & & & & & \\
+m\_yours & & & & & \\
+m\_full & & & & & \\
+\end{longtable}
+
+\textbf{Discussion} (3--4 sentences): Best model by each criterion? Why
+AIC/BIC favor parsimony? Trade-off with adj.R²?
+
+\subsubsection{Part 5: Interpretation and effect sizes (20
+points)}\label{part-5-interpretation-and-effect-sizes-20-points}
+
+For your best model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(car)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Caricamento del pacchetto richiesto: carData
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Caricamento pacchetto: 'car'
+\end{verbatim}
+
+\begin{verbatim}
+## Il seguente oggetto è mascherato da 'package:dplyr':
+## 
+##     recode
+\end{verbatim}
+
+\begin{verbatim}
+## Il seguente oggetto è mascherato da 'package:purrr':
+## 
+##     some
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{Anova}\NormalTok{(m\_yours, }\AttributeTok{type=}\StringTok{"III"}\NormalTok{)  }\CommentTok{\# Type III SS for effect sizes}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Anova Table (Type III tests)
+## 
+## Response: target
+##               Sum Sq  Df   F value  Pr(>F)    
+## (Intercept) 10229912   1 3184.9720 < 2e-16 ***
+## bmi           322025   1  100.2590 < 2e-16 ***
+## s5            235764   1   73.4024 < 2e-16 ***
+## s6              8786   1    2.7356 0.09886 .  
+## sex             9482   1    2.9522 0.08647 .  
+## age               64   1    0.0199 0.88799    
+## Residuals    1400402 436                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\textbf{Tasks}: 1. Identify 2 strongest predictors (Type III F or
+partial η² \textgreater{} 0.02).\\
+2. Interpret: ``The effect of BMI is {[}X{]} units per SD,
+p={[}Y{]}.''\\
+3. \textbf{Discussion}: Confounding example? (Compare univariate vs
+multivariate coefficient for BMI.)
+
+\subsubsection{Part 6: Diagnostics (10
+points)}\label{part-6-diagnostics-10-points}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{)); }\FunctionTok{plot}\NormalTok{(m\_yours)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{student_activity2_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+Comment briefly: violations? Influential cases?
+
+\subsubsection{Part 7: Peer review interaction (5
+points)}\label{part-7-peer-review-interaction-5-points}
+
+\textbf{In class}: Share your table and best model. Groups vote: most
+parsimonious? Most explanatory? Submit 1-sentence peer feedback.
+
+\textbf{Total: 100 points}.
+
+\end{document}

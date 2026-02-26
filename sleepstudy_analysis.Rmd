@@ -1,0 +1,381 @@
+---
+title: "Sleep and Reaction"
+author: "Livio Finos"
+output:
+  pdf_document:
+    toc: true
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Import data
+
+```{r}
+#install.packages("lme4")
+data("sleepstudy", package="lme4")
+summary(sleepstudy)
+library(lmerTest)
+```
+
+# First analysis (wrong)
+
+```{r}
+library(ggplot2)
+p=ggplot(sleepstudy, aes(x = Days, y = Reaction)) + geom_point() + theme_bw()
+
+p
+
+p+geom_smooth(method=lm)
+
+mod <- lm(Reaction ~ Subject + Days, sleepstudy)
+summary(mod) 
+
+```
+
+# Second analysis: Repeated measures ANOVA
+
+```{r}
+p=ggplot(sleepstudy, aes(x = Days, y = Reaction, colour = Subject, group = Subject)) + geom_point()  +geom_line(aes(x = Days, y = Reaction, colour = Subject, group = Subject))
+p+ theme_bw()
+```
+
+
+```{r}
+# The standard way
+mod=aov(Reaction ~ Days + Error(Subject/(Days)),data=sleepstudy)
+summary(mod)
+```
+
+
+A better output and slightly more compleate analysis (Sphericity Corrections):
+
+```{r}
+library(ez)
+mod=ezANOVA(dv=Reaction, wid=Subject, within=.(Days),data=sleepstudy,type=3)
+print(mod)
+```
+
+
+## Sphericity
+
+Sphericity is an assumption about the structure of the covariance matrix in a repeated measures design. 
+It is not an issue in this example, but it is relevant when more than two conditions are measured within subject and compared. Assume, for example that three conditions are compared: `Condition A`, `Condition B` and `Condition C`.
+
+Before we describe Sphericity, let's consider a simpler (but more strict) condition.
+
+**Compound symmetry**
+
+Compound symmetry holds true
+when the variances within conditions are equal (this is the same as the homogeneity of variance
+assumption in between-group designs) but also when the covariances between pairs of conditions
+are roughly equal. As such, we assume that the variation within experimental conditions is fairly
+similar and that no two conditions are any more dependent than any other two.
+
+Provided the observed covariances are roughly equal in our samples (and the variances are OK too) we can be pretty confident that compound symmetry is not violated.
+
+Compound symmetry is met when the correlation between `Condition A` and `Condition B` is equal to the correlation between `Condition A` and `Condition C` and between `Condition B` and `Condition C` (and all pairwise comparisons, in general). But a more direct way to think about compound symmetry is to say that it requires that all subjects in each group change in the same way over trials. In other words the slopes of the lines regressing the dependent variable on time are the same for all subjects. 
+Put that way it is easy to see that compound symmetry can really be an unrealistic assumption. 
+
+
+**Sphericity**  
+
+Although
+compound symmetry has been shown to be a sufficient condition for conducting ANOVA on
+repeated measures data, it is not a necessary condition. Sphericity is a less restrictive form of
+compound symmetry. Sphericity refers to the equality of variances of the differences between
+treatment levels. If you were to take each pair of treatment levels, and calculate the differences
+between each pair of scores it is necessary that these differences have equal variances.
+
+
+We can check sphericity assumption using the covariance matrix, but it turns out to be fairly laborious. Remember that  variance of differences can be computed as:
+$$Var(x-y)=S^2_{x-y} = S^2_x +S^2_y - 2S_{xy}$$
+
+
+Further reading:
+<https://en.wikipedia.org/wiki/Mauchly%27s_sphericity_test>
+
+<!-- and a Video:   -->
+<!-- Part 1: <https://www.youtube.com/watch?v=8BvlRJeCIaM>   -->
+<!-- Part 2: <https://www.youtube.com/watch?v=bUXdWUHJRqA> -->
+<!-- vedi anche:  https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwiQ4b-TtrPvAhWJO-wKHZ2rB4wQFjABegQIAhAD&url=http%3A%2F%2Foak.ucc.nau.edu%2Frh232%2Fcourses%2FEPS625%2FHandouts%2FRM-ANOVA%2FSphericity.pdf&usg=AOvVaw2AjUDNrV5Yn7zbplgBWLYq -->
+This is often an unrealistic assumption in EEG data (spatial location of channel relates to correlation between measures)
+
+### (Further) Limitations of Repeated Measures ANOVA
+
+- (Design and) Data must be balanced
+- Repeated Measures Anova doesn't allow for missing data
+- It only handle factors, no quantitative variables
+
+Mixed model is a more flexible approach.
+
+# Third Analysis: Mixed model
+
+**Random intercept and slope**
+
+```{r}
+library(lmerTest)
+mod <- lmer(Reaction ~ 1+Days + (1 + Days| Subject), data=sleepstudy)
+summary(mod) 
+
+sleepstudy$predicted=predict(mod)
+library(ggplot2)
+p=ggplot(sleepstudy, aes(x = Days, y = Reaction, colour = Subject, group = Subject)) + geom_point() + geom_line(aes(x = Days, y = predicted, colour = Subject, group = Subject))
+p+ theme_bw()
+```
+
+What if we set only the Intercept as random component?
+
+
+**Random intercept only**
+
+
+```{r}
+library(lmerTest)
+mod <- lmer(Reaction ~ 1 + Days + (1 | Subject), data=sleepstudy)
+summary(mod) 
+
+sleepstudy$predicted=predict(mod)
+library(ggplot2)
+p=ggplot(sleepstudy, aes(x = Days, y = Reaction, colour = Subject, group = Subject)) + geom_point()  +geom_line(aes(x = Days, y = predicted, colour = Subject, group = Subject))
+p+ theme_bw()
+
+
+```
+
+Is this model adequate? Does it adequately fit your data?
+
+
+REMARKS:
+
+- Mixed models require careful attention in defining random effects; for example, if we do not also include a random slope coefficient, we implicitly make the same assumptions about the sphericity of the repeated measures. There is still a lively debate today about the most appropriate way to define the random component structure in mixed models, see for example Barr et al. (2013) and Bates et al. (2015) [Barr, D. J., Levy, R., Scheepers, C., & Tily, H. J. (2013). Random effects structure for confirmatory hypothesis testing: Keep it maximal. Journal of memory and language, 68(3), 255-278. Bates, D., Kliegl, R., Vasishth, S., & Baayen, H. (2015). Parsimonious mixed models. arXiv preprint arXiv:1506.04967].    
+- Regarding the lines estimated with mixed models: they are similar but not identical to those we obtain if we estimate a line for each subject; in mixed models, we impose that the coefficients come from the same (normally distributed) population, and this implies that the estimates are (a bit) biased.
+
+# Fourth analysis: Random Coefficient Analysis (= Summary Statistics = Second-level/Group-level Analisys)
+
+## Summary statistics, one for each subject
+
+```{r}
+library(tidyverse)
+dati1lev=sleepstudy %>%
+  group_by(Subject) %>%
+  summarize(Slope=(coefficients(lm(Reaction ~ Days))[2]))
+
+head(dati1lev)
+mean(dati1lev$Slope)
+
+hist(dati1lev$Slope)
+
+```
+
+
+## Parametric Analysis
+
+If we are interested in testing if the sleep deprivation is associated with larger reaction times, we can simply test if the average of the slopes is equal to 0. This can be donw with a simple one-sample t.test.
+```{r}
+t.test(dati1lev$Slope)
+```
+What are the assumptions that are done in this approach?
+
+1. Independence of observations (= subjects in this method): OK
+2. Homoscedasticity (= same variance for each observation/subject). It implies balanced design and same variability of the measures among all subjects. OK? Always OK?
+3. Normality, but with an adequate number of observations, we can invoke the Central Limit Theorem.
+
+## Working with permutations (Resampling-based)
+
+The lack of assumption 2 can't be (easily) solved via parametric approach. Let's consider a nonparametric permutation approach.
+
+The simple code one can use is:
+
+```{r}
+library(jointest)
+mod=flip2sss(Reaction ~ 1 + Days,
+             cluster =sleepstudy$Subject,data=sleepstudy)
+summary(mod)
+```
+
+and in the following we show how this result is reached.
+
+
+
+```{r}
+library(ggplot2)
+perm=sleepstudy
+
+rnd=sapply((0:17)*10,function(strt) {
+  if(rbinom(1,1,.5)==1)
+    strt+(1:10) else
+      strt+(10:1)
+  })
+rnd=as.vector(rnd)
+perm$Reaction=sleepstudy$Reaction[rnd]
+
+p=ggplot(perm, aes(x = Days, y = Reaction, colour = Subject, group = Subject)) + geom_point()  +geom_smooth(method = lm,alpha=.00)
+p + ggtitle("A random permutation") + theme_bw()
+
+dati1levperm=perm %>%
+  group_by(Subject) %>%
+  reframe(estim=(coefficients(lm(Reaction ~ Days))))
+dati1levperm$coeff=(rep(c("Interc","Slope"),nlevels(sleepstudy$Subject)))
+dati1levperm=spread(dati1levperm, key = coeff, value = estim)
+
+head(dati1levperm)
+mean(dati1levperm$Slope)
+
+rnd=sapply((0:17)*10,function(strt) {
+  if(rbinom(1,1,.5)==1)
+    strt+(1:10) else
+      strt+(10:1)
+  })
+rnd=as.vector(rnd)
+perm$Reaction=sleepstudy$Reaction[rnd]
+
+p=ggplot(perm, aes(x = Days, y = Reaction, colour = Subject, group = Subject)) + geom_point()  +geom_smooth(method = lm,alpha=.00)
+p + ggtitle("Another random permutation") + theme_bw()
+
+dati1levperm=perm %>%
+  group_by(Subject) %>%
+  summarize(estim=(coefficients(lm(Reaction ~ Days))))
+dati1levperm$coeff=(rep(c("Interc","Slope"),nlevels(sleepstudy$Subject)))
+dati1levperm=spread(dati1levperm, key = coeff, value = estim)
+
+head(dati1levperm)
+mean(dati1levperm$Slope)
+
+
+Slopes_flips=replicate(100,{
+  rnd=sapply((0:17)*10,function(strt) {
+  if(rbinom(1,1,.5)==1)
+    strt+(1:10) else
+      strt+(10:1)
+  })
+rnd=as.vector(rnd)
+perm$Reaction=sleepstudy$Reaction[rnd]
+  dati1levperm=perm %>%
+  group_by(Subject) %>%
+  summarize(Slope=(coefficients(lm(Reaction ~ Days))[2]))
+mean(dati1levperm$Slope)
+})
+
+
+# ON OBSERVED DATA:
+  dati1lev=sleepstudy %>%
+  group_by(Subject) %>%
+  summarize(Slope=(coefficients(lm(Reaction ~ Days))[2]))
+(Observed=mean(dati1lev$Slope))
+
+# ALWAYS ADD THE OBSERVED TEST STATISTIC!!! (it is one of the possible permutations)
+Slopes_flips=c(Observed,Slopes_flips)
+
+hist(Slopes_flips,20)
+points(Observed,0,cex=3,col="red",pch=20)
+```
+
+Computing the p-value:
+
+```{r}
+# One sided alternative
+mean(Slopes_flips>=Observed)
+
+# Two sided alternative
+mean(abs(Slopes_flips)>=abs(Observed))
+
+```
+
+
+```{r}
+#devtools::install_github("livioivil/flipscores")
+library(flipscores)
+#effect of Days:
+(res=flipscores(Slope~1,data=dati1lev))
+summary(res)
+```
+
+
+
+
+
+
+# Detour
+
+Let's work on Time 0 and 1 only, one can perform paired t-test
+
+```{r}
+sleepstudy2=sleepstudy[sleepstudy$Days<=1,]
+
+t.test(sleepstudy2$Reaction[sleepstudy2$Days==1]-sleepstudy2$Reaction[sleepstudy2$Days==0])
+```
+
+or linear model:
+```{r}
+sleepstudy2$Subject=factor(sleepstudy2$Subject)
+mod <- lm(Reaction ~ Days+ Subject, sleepstudy2)
+summary(mod)
+
+```
+or Repeated Measures:
+
+```{r}
+mod=aov(Reaction ~ Days + Error(Subject/(Days)),data=sleepstudy)
+summary(mod)
+```
+
+or Mixed model (note that we can't set a random slope when we have only two observations; the random coefficients would be not separable from  the random error):
+
+```{r}
+
+library(lmerTest)
+mod <- lmer(Reaction ~ 1+Days + (1 | Subject), data=sleepstudy2)
+summary(mod)
+
+```
+
+They all provide the same result!
+
+
+# (minimal) Bibliography
+
+lme4 package
+<https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf>
+
+Jonathan Baron (2011) Notes on the use of R for psychology experiments
+and questionnaires
+<https://www.sas.upenn.edu/~baron/from_cattell/rpsych/rpsych.html>
+
+Pinheiro, J., & Bates, D. (2006) Mixed-effects models in S and S-PLUS.
+<https://www.springer.com/gp/book/9780387954580>
+
+Bates, D. (2022) lme4: Mixed-effects modeling with R.
+<https://stat.ethz.ch/~maechler/MEMo-pages/lMMwR.pdf>
+
+Fox, J. (2015) Applied regression analysis and generalized linear
+models.
+<https://us.sagepub.com/en-us/nam/applied-regression-analysis-and-generalized-linear-models/book246125>
+
+Fox, J., & Weisberg, S. (2018) An R companion to applied regression.
+<https://us.sagepub.com/en-us/nam/an-r-companion-to-applied-regression/book246125>
+
+Bliese, P. (2022) Multilevel modeling in R (2.7).
+<https://cran.r-project.org/doc/contrib/Bliese_Multilevel.pdf>
+
+Baayen, R. H., Davidson, D. J., & Bates, D. M. (2008) Mixed-effects
+modeling with crossed random effects for subjects and items.
+<https://doi.org/10.1016/j.jml.2007.12.005>
+
+Bürkner, P. C. (2017) brms: An R package for Bayesian multilevel models
+using Stan.
+<https://doi.org/10.18637/jss.v080.i01>
+
+McElreath, R. (2020) Statistical rethinking: A Bayesian course with
+examples in R and Stan.
+<https://xcelab.net/rm/statistical-rethinking/>
+
+GLMM FAQ by Ben Bolker and others
+<https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html>
+
+A complete course on mixed models (in italian)
+<https://osf.io/b7tkp/>
+

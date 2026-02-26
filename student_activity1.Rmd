@@ -1,0 +1,224 @@
+---
+title: "Statistics for Neuroscience – Lab Activity"
+author: "Livio Finos"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc_float: yes
+    toc: yes
+---
+
+# Part 1: Design a study
+
+**Does hippocampal volume predict memory performance?**  
+
+*Design a study*:  
+- How should the data be collected?  
+- What sample size?  
+- Which variables should be recorded?  
+- What statistical analysis is required?  
+
+---
+
+---
+
+---
+
+---
+
+---
+
+---
+
+---
+
+---
+
+---
+
+---
+
+---
+
+# Part 2: Analyse the data
+
+## Age in 2 groups
+
+Load data
+
+```{r}
+library(tidyverse)
+
+data <- read.csv("./data/hippocampus_memory_age_group.csv")
+head(data)
+```
+
+
+### Codebook
+
+| Variable             | Type            | Description                     | Values / Units                   | Notes                                                     |
+| -------------------- | --------------- | ------------------------------- | -------------------------------- | --------------------------------------------------------- |
+| `memory_score`       | numeric         | Composite episodic memory score | ~50–120                          | Outcome variable; higher = better memory                  |
+| `hippocampal_volume` | numeric         | Hippocampal volume from MRI     | ~6–9 mm³                         | Predictor of interest; affected by age and ICV            |
+| `age_group`          | categorical     | Age stratum                     | `"Young"` (<50), `"Older"` (≥50) | Key confounder in analysis                                |
+| `sex`                | binary / factor | Biological sex                  | 0 = female, 1 = male             | May have small/no effect on memory                        |
+| `education_years`    | numeric         | Years of formal education       | ~10–20                           | Small positive effect on memory                           |
+| `ICV`                | numeric         | Intracranial volume             | ~1300–1800 mm³                   | Covariate; larger in males; influences hippocampal volume |
+| `motion`             | numeric         | Head motion during MRI          | ~0–0.4                           | Minor noise; fMRI nuisance variable                       |
+| `sleep_hours`        | numeric         | Average sleep per night         | ~5–9 hours                       | Irrelevant noise variable                                 |
+| `stress_score`       | numeric         | Self-reported stress            | ~30–70                           | Irrelevant noise variable                                 |
+| `handedness`         | binary / factor | Dominant hand                   | 0 = right, 1 = left              | Irrelevant noise variable                                 |
+
+### Explore
+
+1. What variables are available?  
+2. How to 
+```{r}
+summary(data)
+```
+
+### Naive model
+
+Fit a simple regression using only hippocampal volume.
+
+```{r}
+m1 <- lm(memory_score ~ hippocampal_volume, data=data)
+summary(m1)
+```
+
+Plot:
+
+```{r}
+ggplot(data, aes(hippocampal_volume, memory_score)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE)+theme_minimal()
+```
+
+Interpretation:
+- What is the conclusion?
+
+
+### Consider Age (categorical)
+
+Fit a model including age group.
+
+```{r}
+m2 <- lm(memory_score ~ hippocampal_volume + age_group, data=data)
+summary(m2)
+```
+
+Plot colored by age group:
+
+```{r}
+ggplot(data, aes(hippocampal_volume, memory_score,col=age_group)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE) +
+  theme_minimal()
+
+```
+
+Questions:
+- Does the association change?
+- Is this confounding?
+- What happens within each age group?
+
+---
+
+### Add other covariates
+
+Try adding other variables (sex, education, etc.).
+
+```{r}
+m3 <- lm(memory_score ~ hippocampal_volume + age_group + sex + education_years + ICV, data=data)
+summary(m3)
+```
+
+Which variables matter? Which do not?
+
+
+```{r}
+library(effects)
+
+plot(Effect("age_group",m3))
+
+plot(Effect("education_years",m3))
+
+```
+
+### Reflection
+
+Discuss in your group:
+
+- Which variable was the key confounder?
+- Why did the naive model mislead us?
+- How would you design the study differently?
+
+
+## Age (continous)
+
+Load data
+
+```{r}
+library(tidyverse)
+
+data <- read.csv("./data/hippocampus_memory_continuous_age.csv")
+head(data)
+```
+
+
+
+```{r}
+summary(data)
+
+ggplot(data, aes(hippocampal_volume, memory_score)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE)+theme_minimal()
+```
+
+### Consider Age (continous)
+
+Fit a model including age group.
+
+```{r}
+m2 <- lm(memory_score ~ hippocampal_volume + age, data=data)
+summary(m2)
+```
+
+Plot colored by age :
+
+```{r}
+ggplot(data, aes(hippocampal_volume, memory_score,col=age)) +
+  geom_point() + theme_minimal()
+
+```
+
+
+### Add other covariates
+
+Try adding other variables (sex, education, etc.).
+
+```{r}
+m3 <- lm(memory_score ~ hippocampal_volume + age + sex + education_years + ICV, data=data)
+summary(m3)
+```
+
+Which variables matter? Which do not?
+
+
+```{r}
+library(effects)
+
+plot(Effect("age",m3))
+
+plot(Effect("education_years",m3))
+
+```
+
+## Some readings
+
+- Short notes covering the motivation for multiple regression as a method to control confounders, with examples and discussion of randomized trials vs observational studies. [pages.stat.wisc](https://pages.stat.wisc.edu/~karlrohe/lr333/o1_scribed_lecture_notes/multiple_regression_for_confounding.pdf)
+
+- R tutorial on confounding/interaction and model updating, with code examples for adding covariates and visualizing changes. [mbounthavong](https://mbounthavong.com/blog/2022/1/31/r-tutorials-on-confoundinginteraction-and-linear-regression-model-updates)
