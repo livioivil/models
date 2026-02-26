@@ -12,7 +12,8 @@ Teacher: [Livio Finos](https://liviofinos.net)
 *Generalized Linear Models: binomial*:   [html](https://htmlpreview.github.io/?https://github.com/livioivil/main/blob/main/02_glm_binom.html)   
 *Robust Generalized Linear Models: flipscores* (\*):       [pdf](https://github.com/livioivil/models/blob/master/flipscores.pdf)   
 *Linear Mixed Models* (**): [html](https://htmlpreview.github.io/?https://github.com/livioivil/models/blob/master/sleepstudy_analysis.html), [Rmd](https://github.com/livioivil/models/blob/master/sleepstudy_analysis.Rmd), [pdf](https://github.com/livioivil/models/blob/master/sleepstudy_analysis.pdf)  
-*Activity 4: Linear Mixed Models*:  [html](https://htmlpreview.github.io/?https://github.com/livioivil/models/blob/master/student_activity4_oasis_dataset.html), [Rmd](https://github.com/livioivil/models/blob/master/student_activity4_oasis_dataset.Rmd), [dataset](https://github.com/livioivil/models/blob/main/data/oasis_longitudinal.csv)
+*Activity 4: Linear Mixed Models*:  [html](https://htmlpreview.github.io/?https://github.com/livioivil/models/blob/master/student_activity4_oasis_dataset.html), [Rmd](https://github.com/livioivil/models/blob/master/student_activity4_oasis_dataset.Rmd), [dataset](https://github.com/livioivil/models/blob/main/data/oasis_longitudinal.csv)  
+*Robust Generalized Linear Mixed Models: flips2sss* (\*):       [pdf](https://github.com/livioivil/models/blob/master/flips2sss.pdf)   
 <!--| Lecture |  Booklet (html) | Booklet (Rmd) | Booklet (pdf) |
 |:--------------|:----------|:----------|:----------|
 | *Activity 1: Confounders* | [html](https://github.com/livioivil/models/blob/master/student_activity1.html) | [Rmd](https://github.com/livioivil/models/blob/master/student_activity1.Rmd) | |<!-- [pdf](https://github.com/livioivil/models/blob/master/inference_booklet.pdf) | -->
@@ -26,5 +27,5 @@ Teacher: [Livio Finos](https://liviofinos.net)
 | *Multiple Testing in Neuroscience* | [html](https://github.com/livioivil/models/blob/master/fMRI_multiple_testing_slides.html) | [html](https://github.com/livioivil/models/blob/master/fMRI_multiple_testing_booklet.html) | [Rmd](https://github.com/livioivil/models/blob/master/fMRI_multiple_testing.Rmd) | [pdf](https://github.com/livioivil/models/blob/master/fMRI_multiple_testing_booklet.pdf) |
 -->
 
-(*) These are the slides presented at the Summer School [BEYOND classical p-values](https://beyond.dipsco.unitn.it/home-page). More can be found at the [github page](https://livioivil.github.io/flipscores/)  
+(*) These are the slides presented at the Summer School [BEYOND classical p-values](https://beyond.dipsco.unitn.it/home-page). More can be found at the [github page for flipscores](https://livioivil.github.io/flipscores/) and [github page for flip2sss and multivariate things](https://livioivil.github.io/jointest/)  
 (**) More can be found at the [github page](https://github.com/livioivil/longlab)
