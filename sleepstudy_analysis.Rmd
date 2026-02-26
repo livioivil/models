@@ -36,6 +36,7 @@ summary(mod)
 
 ```
 
+
 # Second analysis: Repeated measures ANOVA
 
 ```{r}
