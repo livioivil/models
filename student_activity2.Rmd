@@ -2,12 +2,12 @@
 title: "Statistics for Neuroscience – Lab Activity 2"
 author: "Livio Finos"
 output:
-  pdf_document:
-    number_sections: yes
-    toc: yes
   html_document:
     number_sections: yes
     toc_float: yes
+    toc: yes
+  pdf_document:
+    number_sections: yes
     toc: yes
 ---
 

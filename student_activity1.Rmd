@@ -1,13 +1,13 @@
 ---
-title: "Statistics for Neuroscience – Lab Activity"
+title: "Statistics for Neuroscience – Lab Activity 1"
 author: "Livio Finos"
 output:
-  pdf_document:
-    number_sections: yes
-    toc: yes
   html_document:
     number_sections: yes
     toc_float: yes
+    toc: yes
+  pdf_document:
+    number_sections: yes
     toc: yes
 ---
 
