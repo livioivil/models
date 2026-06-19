@@ -1,5 +1,5 @@
 ---
-title: "Statistics for Neuroscience – Lab Activity 2"
+title: "Lab Activity 2"
 author: "Livio Finos"
 output:
   html_document:

@@ -1,5 +1,5 @@
 ---
-title: "Statistics for Neuroscience – Lab Activity 1"
+title: "Lab Activity 1"
 author: "Livio Finos"
 output:
   html_document:
@@ -68,9 +68,9 @@ head(data)
 | `education_years`    | numeric         | Years of formal education       | ~10–20                           | Small positive effect on memory                           |
 | `ICV`                | numeric         | Intracranial volume             | ~1300–1800 mm³                   | Covariate; larger in males; influences hippocampal volume |
 | `motion`             | numeric         | Head motion during MRI          | ~0–0.4                           | Minor noise; fMRI nuisance variable                       |
-| `sleep_hours`        | numeric         | Average sleep per night         | ~5–9 hours                       | Irrelevant noise variable                                 |
-| `stress_score`       | numeric         | Self-reported stress            | ~30–70                           | Irrelevant noise variable                                 |
-| `handedness`         | binary / factor | Dominant hand                   | 0 = right, 1 = left              | Irrelevant noise variable                                 |
+| `sleep_hours`        | numeric         | Average sleep per night         | ~5–9 hours                       |                                  |
+| `stress_score`       | numeric         | Self-reported stress            | ~30–70                           |                                  |
+| `handedness`         | binary / factor | Dominant hand                   | 0 = right, 1 = left              |                                  |
 
 ### Explore
 

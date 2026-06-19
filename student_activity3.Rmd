@@ -1,5 +1,5 @@
 ---
-title: "Statistics for Neuroscience – Lab Activity"
+title: "Lab Activity"
 author: "Livio"
 date: "2026-02-20"
 output:
