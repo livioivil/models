@@ -535,7 +535,8 @@ dat |>
     geom_point(aes(color = class), size = 3) +
     geom_line(aes(x = studyh, y = fit)) +
     geom_ribbon(aes(ymin = fit - 2*sqrt(fit),
-                    ymax = fit + 2*sqrt(fit)),
+                    ymax = fit + 2*sqrt(fit),
+                    ),
                 alpha = 0.5)
 ```
 
@@ -549,7 +550,9 @@ dat |>
     geom_point(aes(color = class), size = 3) +
     geom_line(aes(x = studyh, y = fit,group = class)) +
     geom_ribbon(aes(ymin = fit - 2*sqrt(fit),
-                    ymax = fit + 2*sqrt(fit)),
+                    ymax = fit + 2*sqrt(fit),
+                    group = class,      
+                    fill = class),
                 alpha = 0.5)
 
 ```
